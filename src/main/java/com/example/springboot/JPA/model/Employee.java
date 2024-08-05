@@ -6,13 +6,14 @@ import lombok.*;
 
 @Data
 @Entity
-
+@Setter
+@Getter
 public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-
-    @Column(name = "first-name")
+    
+    @Column(name = "first_name", unique = true)
     private String firstName;
 
     @Column(name = "last-name")

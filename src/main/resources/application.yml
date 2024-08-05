@@ -17,8 +17,12 @@ spring:
       ddl-auto: update
     open-in-view: false
 
+  ssl:
+    bundle:
+      pem:
+        client:
+          truststore:
+            certificate: "classpath:certificate.pem"
+
 server:
   port: 8081
-
-customerSaveUrl: "http://localhost:8082/customerController/saverecords"
-customerPosturl: "http://localhost:8082/customerController/getrecords"

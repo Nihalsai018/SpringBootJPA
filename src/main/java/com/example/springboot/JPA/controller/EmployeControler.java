@@ -3,11 +3,12 @@ package com.example.springboot.JPA.controller;
 import com.example.springboot.JPA.Exception.ResourceNotFoundException;
 import com.example.springboot.JPA.Repository.EmployeRepositry;
 import com.example.springboot.JPA.model.Employee;
+import com.example.springboot.JPA.service.ServiceInterface.EmployeInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.example.springboot.JPA.service.EmployeService;
+
 
 import java.util.List;
 
@@ -17,34 +18,33 @@ import java.util.List;
 public class EmployeControler {
 
     @Autowired
-    private EmployeService employeService;
-
+    private EmployeInterface employeInterface;
 
     @PostMapping("/saverecords")
 
     public ResponseEntity<Employee> saveEmploye(@RequestBody Employee employee){
-        return new ResponseEntity<Employee>(employeService.saveEmploye(employee), HttpStatus.CREATED);
+        return new ResponseEntity<Employee>(employeInterface.saveEmploye(employee), HttpStatus.CREATED);
     }
 
 
     @PostMapping(value = "/postEmploye")
     @ResponseStatus(HttpStatus.CREATED)
     public Employee saveEmployee(@RequestBody Employee employee){
-        return  employeService.saveEmploye(employee);
+        return  employeInterface.saveEmploye(employee);
 
     }
 
     @GetMapping(value = "/getEmploye")
     @ResponseStatus(HttpStatus.ACCEPTED)
     public List<Employee> getAllEmploye(){
-        return  employeService.getAllEmployee();
+        return  employeInterface.getAllEmployee();
 
     }
 
 
     @GetMapping("/getEmployeesByIds/{ids}")
     public List<Employee> getEmployeesByIds(@PathVariable List<Long> ids) {
-        return employeService.getEmployeesByIds(ids);
+        return employeInterface.getEmployeesByIds(ids);
     }
 
 
@@ -54,20 +54,20 @@ public class EmployeControler {
     @GetMapping("/getbyId/{getbyId}")
     @ResponseStatus(HttpStatus.ACCEPTED)
     public Employee getbyId(@PathVariable("getbyId") Long id){
-        return employeService.getbyId(id);
+        return employeInterface.getbyId(id);
     }
 
     @PutMapping(value = "/update/{updateid}")
     @ResponseStatus(HttpStatus.ACCEPTED)
     public Employee update(@PathVariable("updateid") Long id,@RequestBody Employee employee) throws ResourceNotFoundException {
 
-        return employeService.updateRecords(id,employee);
+        return employeInterface.updateRecords(id,employee);
     }
 
 
     @DeleteMapping(value = "/deleteRecords/{deletebyid}")
     public void deleterecords(@PathVariable("deletebyid") Long id){
-        employeService.deleteRecords(id);
+        employeInterface.deleteRecords(id);
 
 
     }

@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 // if i keep entity it is belong to database opertion the reason of keeping here to in customer class iam keeping as reporsitry and using customer clss
 
 public class Customer {
-    @Id  //act as primary key
+    @Id  //act as primary key   
     @GeneratedValue(strategy = GenerationType.IDENTITY) // it helps to auto increment the id in database we gave in service method
     @JsonProperty("id")   // to customize and it representd the class level varibles , to hide the class levevel properties
     private  int customerId;
