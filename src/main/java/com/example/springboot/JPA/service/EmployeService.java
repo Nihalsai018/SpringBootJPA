@@ -5,13 +5,20 @@ import com.example.springboot.JPA.Repository.EmployeRepositry;
 import com.example.springboot.JPA.model.Customer;
 import com.example.springboot.JPA.model.Employee;
 import com.example.springboot.JPA.service.ServiceInterface.EmployeInterface;
+import org.apache.hc.client5.http.classic.HttpClient;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.client.config.RequestConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.web.client.RestClientSsl;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestClientException;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -28,33 +35,38 @@ public class EmployeService implements EmployeInterface {
 
     private final RestClient restClient;
 
+    public SimpleClientHttpRequestFactory getClientHttpRequestFactory() {
+        SimpleClientHttpRequestFactory clientHttpRequestFactory = new SimpleClientHttpRequestFactory();
 
+        clientHttpRequestFactory.setConnectTimeout(Duration.ofMinutes(1));
+        clientHttpRequestFactory.setReadTimeout(Duration.ofMillis(4000));
+        return clientHttpRequestFactory;
+    }
 
     @Autowired
-    public EmployeService(RestClient.Builder restClientBuilder, RestClientSsl ssl) {
-        this.restClient = restClientBuilder.baseUrl("http://localhost:8082")
-             //   .apply(ssl.fromBundle("client"))
+    public EmployeService(RestClient.Builder restClientBuilder) {
+        this.restClient = restClientBuilder
+                .requestFactory(getClientHttpRequestFactory())
+               .baseUrl("http://localhost:8082")
                 .build();
     }
 
     @Override
-    public Employee saveEmploye(Employee employee) {
+    public Customer saveEmploye(Employee employee) {
         Customer customer = new Customer();
         customer.setCustomerFirstName(employee.getFirstName());
         customer.setCustomerLastName(employee.getLastName());
         customer.setCustomerEmail(employee.getEmail());
 
-        try {
-            restClient.post()
+
+            ResponseEntity<Customer> response =  restClient.post()
                     .uri("/customerController/saverecords")
+                   // .uri("https://outlook.office.com/mail/")
                     .body(customer)
                     .retrieve()
-                    .toBodilessEntity();
-        } catch (RestClientException e) {
-            e.printStackTrace();
-        }
+                    .toEntity(Customer.class);
 
-        return employeRepositry.save(employee);
+        return response.getBody();
     }
 
     @Override
@@ -70,7 +82,6 @@ public class EmployeService implements EmployeInterface {
 
             if (response != null) {
                 for (Employee emp : response) {
-                    // Check for null values and skip if necessary
                     if (emp.getFirstName() != null && emp.getLastName() != null) {
                         externalData.add(emp);
                     }
@@ -80,11 +91,9 @@ public class EmployeService implements EmployeInterface {
             e.printStackTrace();
         }
 
-        // Combine local data with external data, filtering out duplicates
         List<Employee> combinedData = new ArrayList<>(localData);
         combinedData.addAll(externalData);
 
-        // Remove duplicates based on 'id'
         combinedData = combinedData.stream()
                 .filter(distinctByKey(Employee::getId))
                 .collect(Collectors.toList());
@@ -92,12 +101,10 @@ public class EmployeService implements EmployeInterface {
         return combinedData;
     }
 
-    // Helper method to filter duplicates based on key
     public static <T> Predicate<T> distinctByKey(Function<? super T, ?> keyExtractor) {
         Map<Object, Boolean> seen = new ConcurrentHashMap<>();
         return t -> seen.putIfAbsent(keyExtractor.apply(t), Boolean.TRUE) == null;
     }
-
 
     @Override
     public List<Employee> getEmployeesByIds(List<Long> ids) {

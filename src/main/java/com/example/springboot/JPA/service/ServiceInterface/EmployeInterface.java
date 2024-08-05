@@ -1,12 +1,13 @@
 package com.example.springboot.JPA.service.ServiceInterface;
 
 import com.example.springboot.JPA.Exception.ResourceNotFoundException;
+import com.example.springboot.JPA.model.Customer;
 import com.example.springboot.JPA.model.Employee;
 
 import java.util.List;
 
 public interface EmployeInterface {
- public Employee saveEmploye(Employee employee);
+ public Customer saveEmploye(Employee employee);
  public List<Employee> getAllEmployee();
 
  List<Employee> getEmployeesByIds(List<Long> ids);

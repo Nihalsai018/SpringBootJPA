@@ -16,9 +16,9 @@ public class Customer {
     @GeneratedValue(strategy = GenerationType.IDENTITY) // it helps to auto increment the id in database we gave in service method
     @JsonProperty("id")   // to customize and it representd the class level varibles , to hide the class levevel properties
     private  int customerId;
-    @JsonProperty("firstname")
+    @JsonProperty("firstName")
     private String customerFirstName;
-    @JsonProperty("lastname")
+    @JsonProperty("lastName")
     private String customerLastName;
     @JsonProperty("email")
     private String customerEmail;

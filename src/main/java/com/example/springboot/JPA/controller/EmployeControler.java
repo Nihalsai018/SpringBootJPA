@@ -2,6 +2,7 @@ package com.example.springboot.JPA.controller;
 
 import com.example.springboot.JPA.Exception.ResourceNotFoundException;
 import com.example.springboot.JPA.Repository.EmployeRepositry;
+import com.example.springboot.JPA.model.Customer;
 import com.example.springboot.JPA.model.Employee;
 import com.example.springboot.JPA.service.ServiceInterface.EmployeInterface;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,17 +23,17 @@ public class EmployeControler {
 
     @PostMapping("/saverecords")
 
-    public ResponseEntity<Employee> saveEmploye(@RequestBody Employee employee){
-        return new ResponseEntity<Employee>(employeInterface.saveEmploye(employee), HttpStatus.CREATED);
+    public ResponseEntity<Customer> saveEmploye(@RequestBody Employee employee){
+        return new ResponseEntity<Customer>(employeInterface.saveEmploye(employee), HttpStatus.CREATED);
     }
-
-
-    @PostMapping(value = "/postEmploye")
-    @ResponseStatus(HttpStatus.CREATED)
-    public Employee saveEmployee(@RequestBody Employee employee){
-        return  employeInterface.saveEmploye(employee);
-
-    }
+//
+//
+//    @PostMapping(value = "/postEmploye")
+//    @ResponseStatus(HttpStatus.CREATED)
+//    public Employee saveEmployee(@RequestBody Employee employee){
+//        return  employeInterface.saveEmploye(employee);
+//
+//    }
 
     @GetMapping(value = "/getEmploye")
     @ResponseStatus(HttpStatus.ACCEPTED)

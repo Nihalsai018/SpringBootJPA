@@ -17,12 +17,12 @@ spring:
       ddl-auto: update
     open-in-view: false
 
-  ssl:
-    bundle:
-      pem:
-        client:
-          truststore:
-            certificate: "classpath:certificate.pem"
+#  ssl:
+#    bundle:
+#      pem:
+#        client:
+#          truststore:
+#            certificate: "classpath:certificate.pem"
 
 server:
   port: 8081
