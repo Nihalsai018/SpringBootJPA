@@ -20,4 +20,7 @@ public interface EmployeInterface {
 
  public void deleteRecords(Long id);
 
+
+ //added
+
 }

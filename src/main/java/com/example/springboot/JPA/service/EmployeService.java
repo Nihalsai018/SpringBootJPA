@@ -150,7 +150,7 @@ public class EmployeService implements EmployeInterface {
     public void deleteRecords(Long id) {
         try {
             restClient.delete()
-                    .uri("/customerController/{id}", id)
+                    .uri("/customerController/{id}"+ id)
                     .retrieve()
                     .toBodilessEntity();
         } catch (RestClientException e) {
